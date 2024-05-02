@@ -19,6 +19,13 @@ class Router implements RouterInterface
     public function match(
         RequestInterface $request,
     ): ActionInterface|null {
-        dd($request->getPathInfo());
+        $path = trim($request->getPathInfo(), '/');
+        $pathParts = explode('/', $path);
+
+        if ($pathParts[0] === 'compare') {
+            dd('match');
+        }
+
+        dd('no match');
     }
 }
