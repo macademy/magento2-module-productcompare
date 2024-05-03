@@ -3,6 +3,8 @@
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Macademy\ProductCompare\ViewModel\Product $productViewModel */
 $productViewModel = $block->getData('product_view_model');
+/** @var \Macademy\ProductCompare\ViewModel\Pricing $pricingViewModel */
+$pricingViewModel = $block->getData('pricing_view_model');
 $products = $productViewModel->getProducts();
 $invalidSkus = $productViewModel->getInvalidSkus();
 ?>
@@ -22,7 +24,7 @@ $invalidSkus = $productViewModel->getInvalidSkus();
                     <tr>
                         <td><?= $escaper->escapeHtml($product->getSku()) ?></td>
                         <td><?= $escaper->escapeHtml($product->getName()) ?></td>
-                        <td><?= $escaper->escapeHtml($product->getPrice()) ?></td>
+                        <td><?= $pricingViewModel->formatCurrency($product->getPrice()) ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

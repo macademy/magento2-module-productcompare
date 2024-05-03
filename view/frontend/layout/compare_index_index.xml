@@ -5,6 +5,7 @@
             <block name="product.compare" template="Macademy_ProductCompare::compare.phtml">
                 <arguments>
                     <argument name="product_view_model" xsi:type="object">Macademy\ProductCompare\ViewModel\Product</argument>
+                    <argument name="pricing_view_model" xsi:type="object">Macademy\ProductCompare\ViewModel\Pricing</argument>
                 </arguments>
             </block>
         </referenceContainer>
