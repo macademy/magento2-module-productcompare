@@ -1,8 +1,10 @@
 <?php
 /** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Magento\Framework\Escaper $escaper */
-$products = [];
-$invalidSkus = [];
+/** @var \Macademy\ProductCompare\ViewModel\Product $productViewModel */
+$productViewModel = $block->getData('product_view_model');
+$products = $productViewModel->getProducts();
+$invalidSkus = $productViewModel->getInvalidSkus();
 ?>
 <div class="product-compare">
     <?php if ($products): ?>
