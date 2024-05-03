@@ -8,7 +8,6 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class Product implements ArgumentInterface
@@ -74,5 +73,10 @@ class Product implements ArgumentInterface
             ->addFilters([$skuFilter])
             ->create();
         $this->products = $this->productRepository->getList($searchCriteria)->getItems();
+        $validSkus = array_map(
+            static fn($product) => $product->getSku(),
+            $this->products
+        );
+        $this->invalidSkus = array_diff($skus, $validSkus);
     }
 }
