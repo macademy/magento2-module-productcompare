@@ -9,6 +9,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Psr\Log\LoggerInterface;
 
 class Product implements ArgumentInterface
 {
@@ -23,12 +24,14 @@ class Product implements ArgumentInterface
      * @param ProductRepository $productRepository
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly RequestInterface $request,
         private readonly ProductRepository $productRepository,
         private readonly FilterBuilder $filterBuilder,
         private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly LoggerInterface $logger,
     ) {
         $skus = (array)$this->request->getParam('skus');
 
@@ -72,11 +75,15 @@ class Product implements ArgumentInterface
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilters([$skuFilter])
             ->create();
-        $this->products = $this->productRepository->getList($searchCriteria)->getItems();
-        $validSkus = array_map(
-            static fn($product) => $product->getSku(),
-            $this->products
-        );
-        $this->invalidSkus = array_diff($skus, $validSkus);
+        try {
+            $this->products = $this->productRepository->getList($searchCriteria)->getItems();
+            $validSkus = array_map(
+                static fn($product) => $product->getSku(),
+                $this->products
+            );
+            $this->invalidSkus = array_diff($skus, $validSkus);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        }
     }
 }
