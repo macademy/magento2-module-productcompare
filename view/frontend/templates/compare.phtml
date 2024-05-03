@@ -1,0 +1,48 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$products = [];
+$invalidSkus = [];
+?>
+<div class="product-compare">
+    <?php if ($products): ?>
+        <div class="table-wrapper">
+            <table class="data table">
+                <thead>
+                <tr>
+                    <th class="sku"><?= __('SKU') ?></th>
+                    <th class="product-name"><?= __('Product Name') ?></th>
+                    <th class="price"><?= __('Price') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($products as $product): ?>
+                    <tr>
+                        <td><?= $escaper->escapeHtml($product->getSku()) ?></td>
+                        <td><?= $escaper->escapeHtml($product->getName()) ?></td>
+                        <td><?= $escaper->escapeHtml($product->getPrice()) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="message info empty">
+            <div><?= __('No products found for comparison.') ?></div>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($invalidSkus): ?>
+        <div class="message warning invalid-skus">
+            <div>
+                <p><strong><?= __('Invalid SKUs') ?></strong></p>
+                <p><?= __('The following SKUs are invalid or do not exist:') ?></p>
+                <ul class="items">
+                    <?php foreach ($invalidSkus as $invalidSku): ?>
+                        <li class="item"><?= $escaper->escapeHtml($invalidSku) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
